@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import Budget from "./Budget"
-import { getAllBudgets } from "../modules/budgetManager"
+import { getAllBudgets } from "../../modules/budgetManager"
 
 const BudgetList = () => {
     const [budgets, setBudgets] = useState([])

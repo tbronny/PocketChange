@@ -23,13 +23,18 @@ export default function Header({ isLoggedIn }) {
                 </NavbarBrand>
                 <NavbarToggler onClick={toggle} />
                 <Collapse isOpen={isOpen} navbar>
-                    <Nav className="mr-auto" navbar>
+                    <Nav className="me-auto" navbar>
                         {/* When isLoggedIn === true, we will render the Home link */}
                         {isLoggedIn && (
                             <>
                                 <NavItem>
                                     <NavLink tag={RRNavLink} to="/">
                                         Budgets
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={RRNavLink} to="/budget/add">
+                                        +
                                     </NavLink>
                                 </NavItem>
                             </>
@@ -65,7 +70,6 @@ export default function Header({ isLoggedIn }) {
                             </>
                         )}
                     </Nav>
-                    <Nav></Nav>
                 </Collapse>
             </Navbar>
         </div>

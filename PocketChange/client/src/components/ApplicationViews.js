@@ -2,8 +2,8 @@ import React from "react"
 import { Switch, Route, Redirect } from "react-router-dom"
 import Login from "./Login"
 import Register from "./Register"
-import BudgetList from "./BudgetList"
-import BudgetForm from "./BudgetForm"
+import BudgetList from "./budgets/BudgetList"
+import BudgetForm from "./budgets/BudgetForm"
 
 const ApplicationViews = ({ isLoggedIn }) => {
     return (
@@ -16,12 +16,12 @@ const ApplicationViews = ({ isLoggedIn }) => {
                 <BudgetList />
             </Route>
 
-            <Route path="/budgets/add">
+            <Route path="/budget/add" exact>
                 <BudgetForm />
             </Route>
 
-            <Route path="/budgets/:id">
-                {/* TODO: Budget Details Component */}
+            <Route path="/budget/edit/:id">
+                <BudgetForm />
             </Route>
 
             <Route path="/login">

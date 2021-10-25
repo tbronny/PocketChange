@@ -55,9 +55,11 @@ namespace PocketChange.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                          SELECT Label, Total, UserId
-                            FROM Budget
-                           WHERE Id = @Id";
+                          SELECT b.Id, b.Label, b.Total, b.UserId,
+                                        u.FirstName, u.LastName
+                                        FROM Budget b
+                                        LEFT JOIN [User] u ON b.UserId = u.id
+                           WHERE b.Id = @Id";
 
                     DbUtils.AddParameter(cmd, "@Id", id);
 
@@ -72,6 +74,12 @@ namespace PocketChange.Repositories
                             Label = DbUtils.GetString(reader, "Label"),
                             Total = DbUtils.GetDecimal(reader, "Total"),
                             UserId = DbUtils.GetInt(reader, "UserId"),
+                            User = new User()
+                            {
+                                Id = DbUtils.GetInt(reader, "UserId"),
+                                FirstName = DbUtils.GetString(reader, "FirstName"),
+                                LastName = DbUtils.GetString(reader, "LastName")
+                            },
                         };
                     }
 
@@ -117,6 +125,7 @@ namespace PocketChange.Repositories
                                UserId = @UserId
                          WHERE Id = @Id";
 
+                    DbUtils.AddParameter(cmd, "@Id", budget.Id);
                     DbUtils.AddParameter(cmd, "@Label", budget.Label);
                     DbUtils.AddParameter(cmd, "@Total", budget.Total);
                     DbUtils.AddParameter(cmd, "@UserId", budget.UserId);

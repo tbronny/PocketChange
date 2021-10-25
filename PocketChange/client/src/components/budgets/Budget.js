@@ -1,7 +1,7 @@
 import React from "react"
 import { useHistory } from "react-router"
 import { Card, CardBody } from "reactstrap"
-import { deleteBudget } from "../modules/budgetManager"
+import { deleteBudget } from "../../modules/budgetManager"
 
 const Budget = ({ budget }) => {
     const history = useHistory()
@@ -34,9 +34,9 @@ const Budget = ({ budget }) => {
                 </button>
                 <button
                     className="btn btn-dark float-right"
-                    // onClick={() => {
-                    //     history.push(`/budget/edit/${budget.id}`)
-                    // }}
+                    onClick={() => {
+                        history.push(`/budget/edit/${budget.id}`)
+                    }}
                 >
                     Edit
                 </button>

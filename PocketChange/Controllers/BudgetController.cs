@@ -45,6 +45,10 @@ namespace PocketChange.Controllers
         [HttpPost]
         public IActionResult Post(Budget budget)
         {
+            var currentUser = GetCurrentUserProfileId();
+
+            budget.UserId = currentUser.Id;
+
             _budgetRepo.Add(budget);
             return CreatedAtAction("Get", new { id = budget.Id }, budget);
         }
