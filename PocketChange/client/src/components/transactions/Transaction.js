@@ -31,6 +31,7 @@ const Transaction = ({ transaction }) => {
                 </p>
                 <p>{transaction.amount}</p>
                 <p>{date}</p>
+                <p>{transaction.category?.name}</p>
                 <button
                     className="btn btn-danger float-right"
                     onClick={handleDelete}

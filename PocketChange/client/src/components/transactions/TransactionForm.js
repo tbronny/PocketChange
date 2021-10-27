@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useHistory, useParams } from "react-router"
 import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap"
 import { getAllBudgets, getBudgetById } from "../../modules/budgetManager"
+import { getAllCategories } from "../../modules/categoryManager"
 import {
     addTransaction,
     getTransactionById,
@@ -12,7 +13,7 @@ const TransactionForm = () => {
     const [transaction, setTransaction] = useState({})
     const [budgets, setBudgets] = useState([])
     let query = new URLSearchParams(document.location.search.substring(1))
-    // const [categories, setCategories] = useState([])
+    const [categories, setCategories] = useState([])
     const history = useHistory()
     const [isLoading, setIsLoading] = useState(true)
     const params = useParams()
@@ -25,7 +26,7 @@ const TransactionForm = () => {
                 setIsLoading(false)
             })
         }
-        getAllBudgets().then(setBudgets)
+        getAllCategories().then(setCategories)
     }, [])
 
     const handleInputChange = (evt) => {
@@ -115,23 +116,23 @@ const TransactionForm = () => {
                     onChange={handleInputChange}
                 />
             </FormGroup>
-            {/* <FormGroup>
-                <Label for="budget">Budget</Label>
+            <FormGroup>
+                <Label for="category">Category</Label>
                 <select
-                    name="budgetId"
-                    id="budgetId"
+                    name="categoryId"
+                    id="categoryId"
                     className="form-control"
-                    value={transaction.budgetId}
+                    value={transaction.categoryId}
                     onChange={handleInputChange}
                 >
-                    <option value="0">Select a budget</option>
-                    {budgets.map((b) => (
-                        <option key={b.id} value={b.id}>
-                            {b.label}
+                    <option value="0">Select a category</option>
+                    {categories.map((c) => (
+                        <option key={c.id} value={c.id}>
+                            {c.name}
                         </option>
                     ))}
                 </select>
-            </FormGroup> */}
+            </FormGroup>
             <Button
                 className="btn btn-primary"
                 disable={isLoading}

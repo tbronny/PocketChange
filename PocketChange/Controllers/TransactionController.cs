@@ -49,7 +49,7 @@ namespace PocketChange.Controllers
         [HttpPost]
         public IActionResult Post(Transaction transaction)
         {
-            transaction.CategoryId = 1;
+            
             _transactionRepo.Add(transaction);
             return CreatedAtAction("GetById", new { id = transaction.Id }, transaction);
         }
