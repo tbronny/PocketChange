@@ -36,16 +36,10 @@ namespace PocketChange.Repositories
                             Amount = DbUtils.GetDecimal(reader, "Amount"),
                             Date = DbUtils.GetDateTime(reader, "Date"),
                             CategoryId = DbUtils.GetInt(reader, "CategoryId"),
-                            BudgetId = DbUtils.GetInt(reader, "BudgetId"),
                             Category = new Category()
                             {
                                 Id = DbUtils.GetInt(reader, "CategoryId"),
                                 Name = DbUtils.GetString(reader, "categoryName")
-                            },
-                            Budget = new Budget()
-                            {
-                                Id = DbUtils.GetInt(reader, "BudgetId"),
-                                Label = DbUtils.GetString(reader, "budgetLabel")
                             },
                         });
                     }
@@ -102,17 +96,70 @@ namespace PocketChange.Repositories
 
         public void Add(Transaction transaction)
         {
-            throw new NotImplementedException();
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO [Transaction] (Label, Notes, Amount, Date, CategoryId, BudgetId)
+                        OUTPUT INSERTED.ID
+                        VALUES (@Label, @Notes, @Amount, @Date, @CategoryId, @BudgetId)";
+
+                    DbUtils.AddParameter(cmd, "@Label", transaction.Label);
+                    DbUtils.AddParameter(cmd, "@Notes", transaction.Notes);
+                    DbUtils.AddParameter(cmd, "@Amount", transaction.Amount);
+                    DbUtils.AddParameter(cmd, "@Date", transaction.Date);
+                    DbUtils.AddParameter(cmd, "@CategoryId", transaction.CategoryId);
+                    DbUtils.AddParameter(cmd, "@BudgetId", transaction.BudgetId);
+
+                    transaction.Id = (int)cmd.ExecuteScalar();
+                }
+            }
         }
 
         public void Update(Transaction transaction)
         {
-            throw new NotImplementedException();
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE [Transaction]
+                            SET Label = @Label,
+                                Notes = @Notes,
+                                Amount = @Amount,
+                                Date = @Date,
+                                CategoryId = @CategoryId,
+                                BudgetId = @BudgetId
+                        WHERE Id = @Id";
+
+                    DbUtils.AddParameter(cmd, "@Id", transaction.Id);
+                    DbUtils.AddParameter(cmd, "@Label", transaction.Label);
+                    DbUtils.AddParameter(cmd, "@Notes", transaction.Notes);
+                    DbUtils.AddParameter(cmd, "@Amount", transaction.Amount);
+                    DbUtils.AddParameter(cmd, "@Date", transaction.Date);
+                    DbUtils.AddParameter(cmd, "@CategoryId", transaction.CategoryId);
+                    DbUtils.AddParameter(cmd, "@BudgetId", transaction.BudgetId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "DELETE FROM [Transaction] WHERE Id = @Id";
+                    DbUtils.AddParameter(cmd, "@id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
     }

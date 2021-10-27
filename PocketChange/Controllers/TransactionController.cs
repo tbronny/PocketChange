@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using PocketChange.Repositories;
 using PocketChange.Models;
+using System.Security.Claims;
 
 namespace PocketChange.Controllers
 {
@@ -21,17 +22,17 @@ namespace PocketChange.Controllers
             _budgetRepo = budgetRepository;
         }
 
-        [HttpGet]
+        [HttpGet("GetByBudget/{budgetId}")]
         public IActionResult Get(int budgetId)
         {
-            var transaction = _transactionRepo.GetAll(budgetId);
+            var transactions = _transactionRepo.GetAll(budgetId);
 
-            if(transaction == null)
+            if (transactions == null)
             {
                 return NotFound();
             }
 
-            return Ok(transaction);
+            return Ok(transactions);
         }
 
         [HttpGet("{id}")]
@@ -44,5 +45,34 @@ namespace PocketChange.Controllers
             }
             return Ok(transaction);
         }
+
+        [HttpPost]
+        public IActionResult Post(Transaction transaction)
+        {
+            transaction.BudgetId = 1;
+            transaction.CategoryId = 1;
+            _transactionRepo.Add(transaction);
+            return CreatedAtAction("Get", new { id = transaction.Id }, transaction);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, Transaction transaction)
+        {
+            if (id != transaction.Id)
+            {
+                return BadRequest();
+            }
+            _transactionRepo.Update(transaction);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _transactionRepo.Delete(id);
+            return NoContent();
+        }
+
+        
     }
 }

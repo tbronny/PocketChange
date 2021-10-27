@@ -1,35 +1,36 @@
 import React from "react"
 import { useHistory } from "react-router"
-import { Link } from "react-router-dom"
 import { Card, CardBody } from "reactstrap"
-import { deleteBudget } from "../../modules/budgetManager"
+import { deleteTransaction } from "../../modules/transactionManager"
 
-const Budget = ({ budget }) => {
+const Transaction = ({ transaction }) => {
     const history = useHistory()
+
+    const date = new Date(transaction.date).toLocaleDateString()
 
     const handleDelete = (evt) => {
         evt.preventDefault()
         if (
             window.confirm(
-                `Are you sure you want to delete "${budget.label}"? Press OK to confirm.`
+                `Are you sure you want to delete "${transaction.label}"? Press OK to confirm.`
             )
         ) {
-            deleteBudget(budget.id).then(window.location.reload())
+            deleteTransaction(transaction.id).then(window.location.reload())
         } else {
             history.push("/")
         }
     }
 
+    console.log(transaction.label)
+
     return (
         <Card>
             <CardBody>
                 <p>
-                    <Link to={`/transaction/GetByBudget/${budget.id}`}>
-                        <strong>{budget.label}</strong>
-                    </Link>
+                    <strong>{transaction.label}</strong>
                 </p>
-                <p>{budget.total}</p>
-                <p>{budget.transactions?.map((t) => t.label)}</p>
+                <p>{transaction.amount}</p>
+                <p>{date}</p>
                 <button
                     className="btn btn-danger float-right"
                     onClick={handleDelete}
@@ -39,7 +40,7 @@ const Budget = ({ budget }) => {
                 <button
                     className="btn btn-dark float-right"
                     onClick={() => {
-                        history.push(`/budget/edit/${budget.id}`)
+                        history.push(`/transaction/edit/${transaction.id}`)
                     }}
                 >
                     Edit
@@ -49,4 +50,4 @@ const Budget = ({ budget }) => {
     )
 }
 
-export default Budget
+export default Transaction

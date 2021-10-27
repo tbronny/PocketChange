@@ -1,10 +1,10 @@
 import { getToken } from "./authManager"
 
-const baseUrl = "/api/budget"
+const baseUrl = "/api/transaction"
 
-export const getAllBudgets = () => {
-    return getToken().then((token) => {
-        return fetch(baseUrl, {
+export const getAllTransactions = (budgetId) => {
+    return getToken().then((token) =>
+        fetch(`${baseUrl}/GetByBudget/${budgetId}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -13,13 +13,13 @@ export const getAllBudgets = () => {
             if (res.ok) {
                 return res.json()
             } else {
-                throw new Error("ERROR IN GETTING BUDGETS")
+                throw new Error("ERROR IN GETTING TRANSACTIONS")
             }
         })
-    })
+    )
 }
 
-export const getBudgetById = (id) => {
+export const getTransactionById = (id) => {
     return getToken().then((token) => {
         return fetch(`${baseUrl}/${id}`, {
             method: "GET",
@@ -30,13 +30,13 @@ export const getBudgetById = (id) => {
             if (res.ok) {
                 return res.json()
             } else {
-                throw new Error("ERROR GETTING BUDGET BY ID")
+                throw new Error("ERROR GETTING TRANSACTION BY ID")
             }
         })
     })
 }
 
-export const addBudget = (budget) => {
+export const addTransaction = (t) => {
     return getToken().then((token) => {
         return fetch(baseUrl, {
             method: "POST",
@@ -44,7 +44,7 @@ export const addBudget = (budget) => {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(budget),
+            body: JSON.stringify(t),
         }).then((resp) => {
             if (resp.ok) {
                 return resp.json()
@@ -52,14 +52,14 @@ export const addBudget = (budget) => {
                 throw new Error("Unauthorized")
             } else {
                 throw new Error(
-                    "An unknown error occurred while trying to save a new BUDGET."
+                    "An unknown error occurred while trying to save a new TRANSACTION."
                 )
             }
         })
     })
 }
 
-export const deleteBudget = (id) => {
+export const deleteTransaction = (id) => {
     return getToken().then((token) => {
         return fetch(`${baseUrl}/${id}`, {
             method: "DELETE",
@@ -71,15 +71,15 @@ export const deleteBudget = (id) => {
     })
 }
 
-export const updateBudget = (budget) => {
+export const updateTransaction = (t) => {
     return getToken().then((token) => {
-        return fetch(`${baseUrl}/${budget.id}`, {
+        return fetch(`${baseUrl}/${t.id}`, {
             method: "PUT",
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(budget),
+            body: JSON.stringify(t),
         })
     })
 }

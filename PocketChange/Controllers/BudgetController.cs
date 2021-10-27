@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace PocketChange.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BudgetController : ControllerBase
@@ -23,12 +22,12 @@ namespace PocketChange.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var UserId = GetCurrentUserProfileId();
-            if (UserId == null)
+            var user = GetCurrentUserProfileId();
+            if (user == null)
             {
                 return NotFound();
             }
-            return Ok(_budgetRepo.GetAll(UserId.FirebaseUserId));
+            return Ok(_budgetRepo.GetAll(user.FirebaseUserId));
         }
 
         [HttpGet("{id}")]

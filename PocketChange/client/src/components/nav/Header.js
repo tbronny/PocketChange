@@ -34,7 +34,15 @@ export default function Header({ isLoggedIn }) {
                                 </NavItem>
                                 <NavItem>
                                     <NavLink tag={RRNavLink} to="/budget/add">
-                                        +
+                                        add budget
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink
+                                        tag={RRNavLink}
+                                        to="/transaction/add"
+                                    >
+                                        add transaction
                                     </NavLink>
                                 </NavItem>
                             </>

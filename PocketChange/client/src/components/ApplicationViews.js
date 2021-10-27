@@ -4,6 +4,8 @@ import Login from "./Login"
 import Register from "./Register"
 import BudgetList from "./budgets/BudgetList"
 import BudgetForm from "./budgets/BudgetForm"
+import TransactionForm from "./transactions/TransactionForm"
+import TransactionList from "./transactions/TransactionList"
 
 const ApplicationViews = ({ isLoggedIn }) => {
     return (
@@ -22,6 +24,18 @@ const ApplicationViews = ({ isLoggedIn }) => {
 
             <Route path="/budget/edit/:id">
                 <BudgetForm />
+            </Route>
+
+            <Route path="/transaction/GetByBudget/:budgetId" exact>
+                <TransactionList />
+            </Route>
+
+            <Route path="/transaction/add" exact>
+                <TransactionForm />
+            </Route>
+
+            <Route path="/transaction/edit/:id">
+                <TransactionForm />
             </Route>
 
             <Route path="/login">

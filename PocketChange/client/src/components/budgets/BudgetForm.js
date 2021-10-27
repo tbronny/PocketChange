@@ -66,7 +66,7 @@ const BudgetForm = () => {
                 />
             </FormGroup>
             <FormGroup>
-                <Label for="total">Starting Amout</Label>
+                <Label for="total">Starting Amount</Label>
                 <Input
                     type="number"
                     name="total"
