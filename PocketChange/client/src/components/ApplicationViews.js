@@ -6,6 +6,8 @@ import BudgetList from "./budgets/BudgetList"
 import BudgetForm from "./budgets/BudgetForm"
 import TransactionForm from "./transactions/TransactionForm"
 import TransactionList from "./transactions/TransactionList"
+import { CategoryList } from "./categories/CategoryList"
+import CategoryForm from "./categories/CategoryForm"
 
 const ApplicationViews = ({ isLoggedIn }) => {
     return (
@@ -36,6 +38,18 @@ const ApplicationViews = ({ isLoggedIn }) => {
 
             <Route path="/transaction/edit/:id">
                 <TransactionForm />
+            </Route>
+
+            <Route path="/category" exact>
+                <CategoryList />
+            </Route>
+
+            <Route path="/category/add" exact>
+                <CategoryForm />
+            </Route>
+
+            <Route path="/category/edit/:id" exact>
+                <CategoryForm />
             </Route>
 
             <Route path="/login">
