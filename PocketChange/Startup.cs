@@ -72,6 +72,7 @@ namespace PocketChange
             services.AddTransient<IBudgetRepository, BudgetRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ITransactionRepository, TransactionRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
