@@ -49,10 +49,9 @@ namespace PocketChange.Controllers
         [HttpPost]
         public IActionResult Post(Transaction transaction)
         {
-            transaction.BudgetId = 1;
             transaction.CategoryId = 1;
             _transactionRepo.Add(transaction);
-            return CreatedAtAction("Get", new { id = transaction.Id }, transaction);
+            return CreatedAtAction("GetById", new { id = transaction.Id }, transaction);
         }
 
         [HttpPut("{id}")]

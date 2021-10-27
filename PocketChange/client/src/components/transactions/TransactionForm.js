@@ -10,23 +10,22 @@ import {
 
 const TransactionForm = () => {
     const [transaction, setTransaction] = useState({})
-    const [categories, setCategories] = useState([])
+    const [budgets, setBudgets] = useState([])
+    let query = new URLSearchParams(document.location.search.substring(1))
+    // const [categories, setCategories] = useState([])
     const history = useHistory()
     const [isLoading, setIsLoading] = useState(true)
     const params = useParams()
     const transactionId = params.id
 
     useEffect(() => {
-        getAllBudgets().then(() => {
-            if (transactionId) {
-                getTransactionById(transactionId).then((transaction) => {
-                    setTransaction(transaction)
-                    setIsLoading(false)
-                })
-            } else {
+        if (transactionId) {
+            getTransactionById(transactionId).then((transaction) => {
+                setTransaction(transaction)
                 setIsLoading(false)
-            }
-        })
+            })
+        }
+        getAllBudgets().then(setBudgets)
     }, [])
 
     const handleInputChange = (evt) => {
@@ -61,9 +60,11 @@ const TransactionForm = () => {
                 amount: parseFloat(transaction.amount),
                 date: transaction.date,
                 categoryId: transaction.categoryId,
-                budgetId: transaction.budgetId,
+                budgetId: parseInt(query.get("budgetId")),
             }).then(() =>
-                history.push(`/transaction/GetByBudget/${transaction.budgetId}`)
+                history.push(
+                    `/transaction/GetByBudget/${query.get("budgetId")}`
+                )
             )
         }
     }
@@ -115,18 +116,18 @@ const TransactionForm = () => {
                 />
             </FormGroup>
             {/* <FormGroup>
-                <Label for="category">Category</Label>
+                <Label for="budget">Budget</Label>
                 <select
-                    name="categoryId"
-                    id="categoryId"
+                    name="budgetId"
+                    id="budgetId"
                     className="form-control"
-                    value={transaction.categoryId}
+                    value={transaction.budgetId}
                     onChange={handleInputChange}
                 >
-                    <option value="0">Select a category</option>
-                    {categories.map((c) => (
-                        <option key={c.id} value={c.id}>
-                            {c.name}
+                    <option value="0">Select a budget</option>
+                    {budgets.map((b) => (
+                        <option key={b.id} value={b.id}>
+                            {b.label}
                         </option>
                     ))}
                 </select>
