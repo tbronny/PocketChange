@@ -48,8 +48,6 @@ export const addTransaction = (t) => {
         }).then((resp) => {
             if (resp.ok) {
                 return resp.json()
-            } else if (resp.status === 401) {
-                throw new Error("Unauthorized")
             } else {
                 throw new Error(
                     "An unknown error occurred while trying to save a new TRANSACTION."

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import Transaction from "./Transaction"
 import { getAllTransactions } from "../../modules/transactionManager"
 import { useParams } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 const TransactionList = () => {
     const [transactions, setTransactions] = useState([])
@@ -17,6 +18,9 @@ const TransactionList = () => {
 
     return (
         <div className="container">
+            <Link to={`/transaction/add?budgetId=${budgetId}`}>
+                <button>add transaction</button>
+            </Link>
             <div className="row justify-content-center">
                 {transactions.map((transaction) => (
                     <Transaction
