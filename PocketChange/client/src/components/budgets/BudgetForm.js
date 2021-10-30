@@ -44,7 +44,7 @@ const BudgetForm = () => {
             updateBudget({
                 id: parseInt(budgetId),
                 label: budget.label,
-                total: budget.total,
+                monthlyGoal: budget.monthlyGoal,
                 userId: budget.userId,
             }).then(() => history.push("/"))
         } else {
@@ -72,7 +72,7 @@ const BudgetForm = () => {
                     name="total"
                     id="total"
                     placeholder="How much money are you starting with..."
-                    value={budget.total}
+                    value={budget.monthlyGoal}
                     onChange={handleInputChange}
                 />
             </FormGroup>

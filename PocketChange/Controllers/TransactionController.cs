@@ -70,8 +70,6 @@ namespace PocketChange.Controllers
         {
             _transactionRepo.Delete(id);
             return NoContent();
-        }
-
-        
+        }  
     }
 }

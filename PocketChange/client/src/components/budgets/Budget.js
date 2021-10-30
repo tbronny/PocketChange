@@ -1,11 +1,25 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useHistory } from "react-router"
 import { Link } from "react-router-dom"
 import { Card, CardBody } from "reactstrap"
 import { deleteBudget } from "../../modules/budgetManager"
+import { getAllTransactions } from "../../modules/transactionManager"
 
 const Budget = ({ budget }) => {
+    // const [transactions, setTransactions] = useState([])
     const history = useHistory()
+
+    // useEffect(() => {
+    //     getAllTransactions(budget.id).then((t) => setTransactions(t))
+    // }, [])
+
+    // const transAmount = transactions.map((t) => {
+    //     return t.amount
+    // })
+
+    // for (let i = 0; i < transAmount.length; i++) {
+    //     budget.total += transAmount[i]
+    // }
 
     const handleDelete = (evt) => {
         evt.preventDefault()
@@ -28,7 +42,7 @@ const Budget = ({ budget }) => {
                         <strong>{budget.label}</strong>
                     </Link>
                 </p>
-                <p>{budget.total}</p>
+                <p>{budget.monthlyGoal}</p>
                 <p>{budget.transactions?.map((t) => t.label)}</p>
                 <button
                     className="btn btn-danger float-right"

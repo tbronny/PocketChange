@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react"
 import { useHistory, useParams } from "react-router"
-import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap"
+import {
+    TextField,
+    Typography,
+    Input,
+    Grid,
+    Button,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+} from "@material-ui/core"
 import { getAllBudgets, getBudgetById } from "../../modules/budgetManager"
 import { getAllCategories } from "../../modules/categoryManager"
 import {
@@ -8,6 +18,7 @@ import {
     getTransactionById,
     updateTransaction,
 } from "../../modules/transactionManager"
+import transitions from "@material-ui/core/styles/transitions"
 
 const TransactionForm = () => {
     const [transaction, setTransaction] = useState({})
@@ -49,42 +60,77 @@ const TransactionForm = () => {
                 notes: transaction.notes,
                 amount: parseFloat(transaction.amount),
                 date: transaction.date,
+                isExpense: transaction.isExpense,
                 categoryId: transaction.categoryId,
                 budgetId: transaction.budgetId,
             }).then(() =>
                 history.push(`/transaction/GetByBudget/${transaction.budgetId}`)
             )
         } else {
-            addTransaction({
-                label: transaction.label,
-                notes: transaction.notes,
-                amount: parseFloat(transaction.amount),
-                date: transaction.date,
-                categoryId: transaction.categoryId,
-                budgetId: parseInt(query.get("budgetId")),
-            }).then(() =>
-                history.push(
-                    `/transaction/GetByBudget/${query.get("budgetId")}`
+            if (transaction.isExpense === "true") {
+                addTransaction({
+                    label: transaction.label,
+                    notes: transaction.notes,
+                    amount: parseFloat(transaction.amount * -1),
+                    date: transaction.date,
+                    isExpense: JSON.parse(transaction.isExpense),
+                    categoryId: parseInt(transaction.categoryId),
+                    budgetId: parseInt(query.get("budgetId")),
+                }).then(() =>
+                    history.push(
+                        `/transaction/GetByBudget/${query.get("budgetId")}`
+                    )
                 )
-            )
+            } else if (transaction.isExpense === "false") {
+                addTransaction({
+                    label: transaction.label,
+                    notes: transaction.notes,
+                    amount: parseFloat(transaction.amount),
+                    date: transaction.date,
+                    isExpense: JSON.parse(transaction.isExpense),
+                    categoryId: parseInt(transaction.categoryId),
+                    budgetId: parseInt(query.get("budgetId")),
+                }).then(() =>
+                    history.push(
+                        `/transaction/GetByBudget/${query.get("budgetId")}`
+                    )
+                )
+            }
         }
     }
 
     return (
-        <Form>
-            <FormGroup>
-                <Label for="label">Label</Label>
+        <Grid container spacing={0}>
+            {/* <Grid item xs={3}> */}
+            <FormControl fullWidth>
+                <InputLabel for="isExpense">Type</InputLabel>
+                <select
+                    name="expense"
+                    id="isExpense"
+                    value={transaction.isExpense}
+                    onChange={handleInputChange}
+                >
+                    <option value="false">Income</option>
+                    <option value="true">Expense</option>
+                </select>
+            </FormControl>
+            {/* </Grid>
+            <Grid item xs={3}> */}
+            <FormControl fullWidth>
+                <InputLabel for="label">Purchase Location</InputLabel>
                 <Input
                     type="text"
                     name="label"
                     id="label"
-                    placeholder="Where did you spend this money..."
+                    placeholder="Walmart?"
                     value={transaction.label}
                     onChange={handleInputChange}
                 />
-            </FormGroup>
-            <FormGroup>
-                <Label for="notes">Notes</Label>
+            </FormControl>
+            {/* </Grid>
+            <Grid item xs={3}> */}
+            <FormControl fullWidth>
+                <InputLabel for="notes">Notes</InputLabel>
                 <Input
                     type="text"
                     name="notes"
@@ -93,9 +139,11 @@ const TransactionForm = () => {
                     value={transaction.notes}
                     onChange={handleInputChange}
                 />
-            </FormGroup>
-            <FormGroup>
-                <Label for="amount">Amount</Label>
+            </FormControl>
+            {/* </Grid>
+            <Grid item xs={3}> */}
+            <FormControl fullWidth>
+                <InputLabel for="amount">Amount</InputLabel>
                 <Input
                     type="number"
                     name="amount"
@@ -104,20 +152,23 @@ const TransactionForm = () => {
                     value={transaction.amount}
                     onChange={handleInputChange}
                 />
-            </FormGroup>
-            <FormGroup>
-                <Label for="date">Date</Label>
+            </FormControl>
+            {/* </Grid>
+            <Grid item xs={3}> */}
+            <FormControl>
+                <InputLabel for="date"></InputLabel>
                 <Input
                     type="date"
                     name="date"
                     id="date"
-                    placeholder="When was this transaction..."
                     value={transaction.date}
                     onChange={handleInputChange}
                 />
-            </FormGroup>
-            <FormGroup>
-                <Label for="category">Category</Label>
+            </FormControl>
+            {/* </Grid>
+            <Grid item xs={3}> */}
+            <FormControl fullWidth>
+                <InputLabel for="categoryId">Category</InputLabel>
                 <select
                     name="categoryId"
                     id="categoryId"
@@ -132,7 +183,8 @@ const TransactionForm = () => {
                         </option>
                     ))}
                 </select>
-            </FormGroup>
+            </FormControl>
+            {/* </Grid> */}
             <Button
                 className="btn btn-primary"
                 disable={isLoading}
@@ -140,7 +192,7 @@ const TransactionForm = () => {
             >
                 {transactionId ? "Save" : "Submit"}
             </Button>
-        </Form>
+        </Grid>
     )
 }
 

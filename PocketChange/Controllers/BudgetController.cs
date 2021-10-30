@@ -19,15 +19,23 @@ namespace PocketChange.Controllers
             _budgetRepo = budgetRepository;
         }
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("GetByMonth")]
+        public IActionResult GetByMonth()
         {
+            int month = DateTime.Now.Month;
+            int year = DateTime.Now.Year;
+            var startDate = new DateTime(year, month, 1);
+            var endDate = startDate.AddMonths(1);
+
             var user = GetCurrentUserProfileId();
             if (user == null)
             {
                 return NotFound();
             }
-            return Ok(_budgetRepo.GetAll(user.FirebaseUserId));
+
+            var getByDates = _budgetRepo.GetAllByDateRange(user.Id, startDate, endDate);
+
+            return Ok(getByDates);
         }
 
         [HttpGet("{id}")]

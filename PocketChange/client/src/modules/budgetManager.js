@@ -4,7 +4,7 @@ const baseUrl = "/api/budget"
 
 export const getAllBudgets = () => {
     return getToken().then((token) => {
-        return fetch(baseUrl, {
+        return fetch(`${baseUrl}/GetByMonth`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,

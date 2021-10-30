@@ -18,7 +18,7 @@ namespace PocketChange.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT t.Id, t.Label [transactionLabel], t.Notes, t.Amount, t.Date, 
-                                            t.CategoryId, t.BudgetId, c.Name [categoryName], b.Label [budgetLabel]
+                                            t.CategoryId, t.BudgetId, t.IsExpense, c.Name [categoryName], b.Label [budgetLabel]
                                         FROM [Transaction] t
                                         LEFT JOIN Budget b ON t.BudgetId = b.Id
                                         LEFT JOIN Category c ON t.CategoryId = c.Id
@@ -35,11 +35,18 @@ namespace PocketChange.Repositories
                             Notes = DbUtils.GetString(reader, "Notes"),
                             Amount = DbUtils.GetDecimal(reader, "Amount"),
                             Date = DbUtils.GetDateTime(reader, "Date"),
+                            IsExpense = reader.GetBoolean(reader.GetOrdinal("IsExpense")),
                             CategoryId = DbUtils.GetInt(reader, "CategoryId"),
+                            BudgetId = DbUtils.GetInt(reader, "BudgetId"),
                             Category = new Category()
                             {
                                 Id = DbUtils.GetInt(reader, "CategoryId"),
                                 Name = DbUtils.GetString(reader, "categoryName")
+                            },
+                            Budget = new Budget()
+                            {
+                                Id = DbUtils.GetInt(reader, "BudgetId"),
+                                Label = DbUtils.GetString(reader, "budgetLabel")
                             },
                         });
                     }
@@ -57,7 +64,7 @@ namespace PocketChange.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT t.Id, t.Label [transactionLabel], t.Notes, t.Amount, t.Date, 
-                                            t.CategoryId, t.BudgetId, c.Name [categoryName], b.Label [budgetLabel]
+                                            t.CategoryId, t.BudgetId, t.IsExpense, c.Name [categoryName], b.Label [budgetLabel]
                                         FROM [Transaction] t
                                         LEFT JOIN Budget b ON t.BudgetId = b.Id
                                         LEFT JOIN Category c ON t.CategoryId = c.Id
@@ -74,6 +81,7 @@ namespace PocketChange.Repositories
                             Notes = DbUtils.GetString(reader, "Notes"),
                             Amount = DbUtils.GetDecimal(reader, "Amount"),
                             Date = DbUtils.GetDateTime(reader, "Date"),
+                            IsExpense = reader.GetBoolean(reader.GetOrdinal("IsExpense")),
                             CategoryId = DbUtils.GetInt(reader, "CategoryId"),
                             BudgetId = DbUtils.GetInt(reader, "BudgetId"),
                             Category = new Category()
@@ -102,9 +110,9 @@ namespace PocketChange.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO [Transaction] (Label, Notes, Amount, Date, CategoryId, BudgetId)
+                        INSERT INTO [Transaction] (Label, Notes, Amount, Date, CategoryId, BudgetId, IsExpense)
                         OUTPUT INSERTED.ID
-                        VALUES (@Label, @Notes, @Amount, @Date, @CategoryId, @BudgetId)";
+                        VALUES (@Label, @Notes, @Amount, @Date, @CategoryId, @BudgetId, @IsExpense)";
 
                     DbUtils.AddParameter(cmd, "@Label", transaction.Label);
                     DbUtils.AddParameter(cmd, "@Notes", transaction.Notes);
@@ -112,6 +120,7 @@ namespace PocketChange.Repositories
                     DbUtils.AddParameter(cmd, "@Date", transaction.Date);
                     DbUtils.AddParameter(cmd, "@CategoryId", transaction.CategoryId);
                     DbUtils.AddParameter(cmd, "@BudgetId", transaction.BudgetId);
+                    DbUtils.AddParameter(cmd, "@IsExpense", transaction.IsExpense);
 
                     transaction.Id = (int)cmd.ExecuteScalar();
                 }
@@ -132,7 +141,8 @@ namespace PocketChange.Repositories
                                 Amount = @Amount,
                                 Date = @Date,
                                 CategoryId = @CategoryId,
-                                BudgetId = @BudgetId
+                                BudgetId = @BudgetId,
+                                IsExpense = @IsExpense
                         WHERE Id = @Id";
 
                     DbUtils.AddParameter(cmd, "@Id", transaction.Id);
@@ -142,6 +152,7 @@ namespace PocketChange.Repositories
                     DbUtils.AddParameter(cmd, "@Date", transaction.Date);
                     DbUtils.AddParameter(cmd, "@CategoryId", transaction.CategoryId);
                     DbUtils.AddParameter(cmd, "@BudgetId", transaction.BudgetId);
+                    DbUtils.AddParameter(cmd, "@IsExpense", transaction.IsExpense);
 
                     cmd.ExecuteNonQuery();
                 }
